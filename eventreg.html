@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CampusConnect | Create Event</title>
+  <link rel="stylesheet" href="eventreg.css">
+</head>
+<body>
+
+<div class="page">
+
+  <a href="clubdash.html" class="back-btn">← Back to Dashboard</a>
+
+  <div class="event-details-card">
+    <h2>Create New Event</h2>
+
+    <form id="eventForm">
+      <label>Event Name</label>
+      <input type="text" placeholder="Enter event name" required>
+
+      <label>Date</label>
+      <input type="date" required>
+
+      <label>Time</label>
+      <input type="time" required>
+
+      <label>Location</label>
+      <input type="text" placeholder="Event location" required>
+
+      <label>Category</label>
+      <input type="text" placeholder="Tech, Cultural, Sports..." required>
+
+      <label>Description</label>
+      <textarea placeholder="Event description" rows="4" required></textarea>
+
+      <button type="submit">Create Event</button>
+    </form>
+
+    <div id="confirmation" class="confirmation" style="display:none;">
+      <h3>🎉 Event Created!</h3>
+      <p>Your event is now pending admin approval.</p>
+      <button onclick="window.location.href='clubdash.html'">Back to Dashboard</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="eventreg.js"></script>
+</body>
+</html>

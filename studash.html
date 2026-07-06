@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Dashboard | CampusConnect</title>
+  <link rel="stylesheet" href="dash.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">🎓 CampusConnect</div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="events.html">Events</a>
+    <a class="active" href="studash.html">Dashboard</a>
+    <a href="#">Notifications</a>
+  </nav>
+  <div class="profile">
+    <div class="avatar">JD</div>
+    <div>
+      <strong></strong>
+      <span>Student</span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="container">
+
+  <!-- HEADER -->
+  <section class="dashboard-header">
+    <h1>Student Dashboard</h1>
+    <p>Here's an overview of your campus activities</p>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      
+      <h2>12</h2>
+      <p>Registered Events</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>5</h2>
+      <p>Upcoming Events</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>8</h2>
+      <p>Certificates Earned</p>
+    </div>
+    <div class="stat-card">
+     
+      <h2>3</h2>
+      <p>Clubs Joined</p>
+    </div>
+  </section>
+
+  <!-- QUICK ACTIONS -->
+  <section class="card">
+    <h3>Quick Actions</h3>
+    <p class="subtext">Access your most-used features</p>
+
+    <div class="actions-grid">
+      <div class="action blue"><span>View My Events</span></div>
+      <div class="action purple"><span>Download Certificates</span></div>
+      <div class="action green"><span>Give Feedback</span></div>
+      <div class="action orange"><span>Explore New Events</span></div>
+    </div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section class="progress-card">
+    <div class="progress-header">
+      <h3>Event Attendance Progress</h3>
+      <span>50%</span>
+    </div>
+    <p>You’ve attended 3 out of 6 events</p>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </section>
+
+  <!-- MY EVENTS -->
+  <section class="card">
+    <div class="card-header">
+      <h3>My Events</h3>
+      <a href="#">View All →</a>
+    </div>
+
+    <div class="event-item">
+      <div>
+        <h4>Annual Tech Fest 2026</h4>
+        <p> Jan 30, 2026 |  10:00 AM | Main Auditorium</p>
+      </div>
+      <span class="badge">Registered</span>
+    </div>
+
+    <div class="event-item">
+      <div>
+        <h4>Career Fair & Networking</h4>
+        <p> Feb 5, 2026 |  9:00 AM |  Sports Complex</p>
+      </div>
+      <span class="badge">Registered</span>
+    </div>
+  </section>
+
+  <!-- RECENT ACTIVITY -->
+  <section class="card">
+    <h3>Recent Activity</h3>
+
+    <div class="activity success">
+       Registration Confirmed: Tech Fest 2026
+      <span>2 hours ago</span>
+    </div>
+
+    <div class="activity info">
+       Event Reminder: Career Fair starts in 3 days
+      <span>5 hours ago</span>
+    </div>
+
+   
+
+    <div class="activity warning">
+      🚀 New Event: AI Summit 2026
+      <span>2 days ago</span>
+    </div>
+  </section>
+
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const name = localStorage.getItem("userName");
+  const role = localStorage.getItem("userRole");
+
+  if (!name || !role) {
+    alert("Please log in first!");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Update navbar/profile section
+  const profileName = document.querySelector(".profile strong");
+  const profileRole = document.querySelector(".profile span");
+  const avatar = document.querySelector(".profile .avatar");
+
+  if (profileName) profileName.textContent = name;
+  if (profileRole) profileRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+  if (avatar) avatar.textContent = name.split(" ").map(n => n[0].toUpperCase()).join("").slice(0,2);
+
+  // Role check: prevent wrong role access
+  const pageRole = window.location.pathname.includes("studash") ? "student" :
+                   window.location.pathname.includes("clubdash") ? "club" :
+                   window.location.pathname.includes("admdash") ? "admin" : "";
+
+  if (role !== pageRole) {
+    alert("Access denied for your role!");
+    window.location.href = "home.html";
+  }
+  const navName = document.querySelector(".nav-right .user strong");
+const navRole = document.querySelector(".nav-right .user small");
+if (navName && navRole) {
+  navName.textContent = localStorage.getItem("userName") || "Guest";
+  navRole.textContent = (localStorage.getItem("userRole") || "Visitor").toUpperCase();
+}
+});
+// studentdash.js
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("events-container");
+  const email = localStorage.getItem("userEmail"); // student's email
+
+  try {
+    const res = await fetch("http://localhost:3000/events");
+    const events = await res.json();
+
+    container.innerHTML = events.map(ev => `
+      <div class="event-item">
+        <div>
+          <h4>${ev.name}</h4>
+          <p>${ev.date} | ${ev.time} | ${ev.location}</p>
+        </div>
+        <button onclick="registerEvent(${ev.id})">Register</button>
+      </div>
+    `).join("");
+  } catch (err) { console.error(err); }
+
+  window.registerEvent = async (eventId) => {
+    const studentName = localStorage.getItem("userName");
+    const rollNo = prompt("Enter your Roll Number:");
+    const contact = prompt("Enter your Contact Number:");
+
+    try {
+      const res = await fetch("http://localhost:3000/register-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, studentName, email, rollNo, contact })
+      });
+      const data = await res.json();
+      if (res.ok) alert("Registered successfully!");
+      else alert(data.message);
+    } catch (err) { console.error(err); }
+  };
+});
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CampusConnect | Home</title>
+  <link rel="stylesheet" href="home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-left">
+    <div class="logo">🎓 Campus<span>Connect</span></div>
+    <a href="home.html" class="active">Home</a>
+    <a href="events.html">Events</a>
+    <a href="studash.html">Dashboard</a>
+    <a class="notif">
+      Notifications <span class="dot"></span>
+    </a>
+  </div>
+
+  <div class="nav-right">
+    <div class="avatar"></div>
+    <div class="user">
+      <strong></strong>
+      <small>Student</small>
+    </div>
+    <button class="logout">Logout</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="container">
+
+  <!-- WELCOME BANNER -->
+  <section class="welcome">
+    <h1>Welcome</h1>
+    <p>Discover events, join clubs, and connect with your campus community</p>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat-card">
+      <p>Upcoming Events</p>
+      <h2>0</h2>
+    </div>
+    <div class="stat-card">
+      <p>Registered Events</p>
+      <h2>0</h2>
+    </div>
+    <div class="stat-card">
+      <p>Certificates Earned</p>
+      <h2>0</h2>
+    </div>
+    <div class="stat-card">
+      <p>Clubs Joined</p>
+      <h2>0</h2>
+    </div>
+  </section>
+
+  <!-- UPCOMING EVENTS -->
+  <section class="card-section">
+    <div class="section-head">
+      <h3> Upcoming Events</h3>
+      <a>View All →</a>
+    </div>
+
+    <div class="event-card">
+      <div class="date-box">
+        <span>Feb</span>
+        <strong>12</strong>
+      </div>
+      <div class="event-info">
+        <h4>Cognizance 2026</h4>
+        
+        <button><a href="eventreg.html">Register Now</a></button>
+      </div>
+      <span class="tag">Technology</span>
+    </div>
+
+    <div class="event-card">
+      <div class="date-box">
+        <span>Feb</span>
+        <strong>20</strong>
+      </div>
+      <div class="event-info">
+        <h4>Career Fair & Networking</h4>
+        
+        <button>Register Now</button>
+      </div>
+      <span class="tag gray">Career</span>
+    </div>
+  </section>
+
+  <!-- CLUBS -->
+  <section class="card-section">
+    <div class="section-head">
+      <h3> Explore Clubs</h3>
+      <a>View All →</a>
+    </div>
+
+    <div class="clubs">
+      <div class="club-card">
+        <h4>Google Developers Club</h4>
+        <p>Build amazing projects together</p>
+        <button>Join Club</button>
+      </div>
+
+      <div class="club-card">
+        <h4>AWS Club</h4>
+        <p>Capture campus moments</p>
+        <button>Join Club</button>
+      </div>
+
+      <div class="club-card">
+        <h4>AIISEC</h4>
+        <p>Express yourself on stage</p>
+        <button>Join Club</button>
+      </div>
+
+      <div class="club-card">
+        <h4>Rotract Club</h4>
+        <p>Innovation & automation</p>
+        <button>Join Club</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFICATIONS -->
+  <section class="card-section">
+    <h3> Notifications</h3>
+
+    <div class="notification">
+      Registration Open: Tech Fest 2026
+      <span>2 hours ago</span>
+    </div>
+
+    
+
+    <a class="view-all">View All Notifications</a>
+  </section>
+
+</main>
+
+<script src="home.js"></script>
+</body>
+</html>

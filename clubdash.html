@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Club Dashboard | CampusConnect</title>
+  <link rel="stylesheet" href="dash.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">🎓 CampusConnect</div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="events.html">Events</a>
+    <a class="active" href="clubdash.html">Dashboard</a>
+    <a href="#">Notifications</a>
+  </nav>
+  <div class="profile">
+    <div class="avatar">CC</div>
+    <div>
+      <strong>Coding Club</strong>
+      <span>Club Member</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="dashboard-header">
+    <h1>Club Dashboard</h1>
+    <p>Manage your club events and members efficiently </p>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-grid">
+    <div class="stat-card">
+     
+      <h2>6</h2>
+      <p>Events Organized</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>120</h2>
+      <p>Total Registrations</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>2</h2>
+      <p>Upcoming Events</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>14</h2>
+      <p>Announcements</p>
+    </div>
+  </section>
+
+  <!-- QUICK ACTIONS -->
+  <section class="card">
+    <h3>Quick Actions</h3>
+    <p class="subtext">Common club operations</p>
+
+    <div class="actions-grid">
+      <a href="eventreg.html" class="action blue">
+  <span>Create Event</span>
+</a>
+      <div class="action purple"><span>View Registrations</span></div>
+      <div class="action green"><span>Send Announcement</span></div>
+      <div class="action orange"><span>Event Analytics</span></div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+   <div class="action blue">
+  <span><a href="eventreg.html" style="color:white; text-decoration:none;">Create Event</a></span>
+</div>
+  <section class="card">
+    <div class="card-header">
+      <h3>Managed Events</h3>
+      <a href="#">View All →</a>
+    </div>
+
+    <div class="event-item">
+      <div>
+        <h4>Hackathon 2026</h4>
+        <p> Feb 20, 2026 |  Main Hall</p>
+      </div>
+      <span class="badge">Open</span>
+    </div>
+
+    <div class="event-item">
+      <div>
+        <h4>Web Dev Workshop</h4>
+        <p> Mar 10, 2026 |  Lab 3</p>
+      </div>
+      <span class="badge">Upcoming</span>
+    </div>
+  </section>
+
+  <!-- ACTIVITY -->
+  <section class="card">
+    <h3>Recent Activity</h3>
+
+    <div class="activity success">
+       Event "Hackathon 2026" published successfully
+      <span>1 hour ago</span>
+    </div>
+
+    <div class="activity info">
+       15 new registrations received
+      <span>4 hours ago</span>
+    </div>
+
+    <div class="activity warning">
+       Announcement sent to participants
+      <span>1 day ago</span>
+    </div>
+  </section>
+
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.querySelector(".card .event-item")?.parentElement;
+
+  try {
+    const res = await fetch("http://localhost:3000/pending-events");
+    const events = await res.json();
+
+    const clubName = localStorage.getItem("userName");
+
+    const myEvents = events.filter(e => e.clubName === clubName);
+
+    const section = document.querySelectorAll(".card")[1];
+
+    section.innerHTML = `
+      <div class="card-header">
+        <h3>Managed Events</h3>
+      </div>
+      ${myEvents.map(e => `
+        <div class="event-item">
+          <div>
+            <h4>${e.name}</h4>
+            <p>${e.date} | ${e.location}</p>
+          </div>
+          <span class="badge">Pending</span>
+        </div>
+      `).join("")}
+    `;
+
+  } catch (err) {
+    console.error(err);
+  }
+});
+</script>
+</body>
+</html>

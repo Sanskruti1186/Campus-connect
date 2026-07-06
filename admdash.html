@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | CampusConnect</title>
+  <link rel="stylesheet" href="dash.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">🎓 CampusConnect</div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="events.html">Events</a>
+    <a class="active" href="admdash.html">Dashboard</a>
+    <a href="#">Notifications</a>
+  </nav>
+  <div class="profile">
+    <div class="avatar">AD</div>
+    <div>
+      <strong>Admin</strong>
+      <span>System Admin</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p>System overview and platform control </p>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-grid">
+    <div class="stat-card">
+      
+      <h2>1,240</h2>
+      <p>Total Students</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>18</h2>
+      <p>Active Clubs</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>42</h2>
+      <p>Total Events</p>
+    </div>
+    <div class="stat-card">
+      
+      <h2>5</h2>
+      <p>Pending Requests</p>
+    </div>
+  </section>
+
+  <!-- QUICK ACTIONS -->
+  <section class="card">
+    <h3>Admin Actions</h3>
+    <p class="subtext">System-level controls</p>
+
+    <div class="actions-grid">
+      <div class="action blue"><span>Manage Users</span></div>
+      <div class="action purple"><span>Approve Clubs</span></div>
+      <div class="action green"><span>Moderate Events</span></div>
+      <div class="action orange"><span>View Reports</span></div>
+    </div>
+  </section>
+
+  <!-- REQUESTS -->
+   <section class="card">
+  <h3>Pending Events</h3>
+  <div id="pending-events-container"></div>
+</section>
+  <section class="card">
+    <h3>Pending Approvals</h3>
+
+    <div class="event-item">
+      <div>
+        <h4>AI Club Registration</h4>
+        <p>Requested by Faculty Coordinator</p>
+      </div>
+      <span class="badge">Pending</span>
+    </div>
+
+    <div class="event-item">
+      <div>
+        <h4>Event Approval: Startup Meetup</h4>
+        <p>Organized by E-Cell</p>
+      </div>
+      <span class="badge">Pending</span>
+    </div>
+  </section>
+
+  <!-- SYSTEM LOGS -->
+  <section class="card">
+    <h3>System Logs</h3>
+
+    <div class="activity success">
+       New club approved successfully
+      <span>2 hours ago</span>
+    </div>
+
+    <div class="activity info">
+       25 new students registered
+      <span>6 hours ago</span>
+    </div>
+
+    <div class="activity warning">
+       Event flagged for review
+      <span>1 day ago</span>
+    </div>
+  </section>
+
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const name = localStorage.getItem("userName");
+  const role = localStorage.getItem("userRole");
+
+  if (!name || !role) {
+    alert("Please log in first!");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Update navbar/profile section
+  const profileName = document.querySelector(".profile strong");
+  const profileRole = document.querySelector(".profile span");
+  const avatar = document.querySelector(".profile .avatar");
+
+  if (profileName) profileName.textContent = name;
+  if (profileRole) profileRole.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+  if (avatar) avatar.textContent = name.split(" ").map(n => n[0].toUpperCase()).join("").slice(0,2);
+
+  // Role check: prevent wrong role access
+  const pageRole = window.location.pathname.includes("studash") ? "student" :
+                   window.location.pathname.includes("clubdash") ? "club" :
+                   window.location.pathname.includes("admdash") ? "admin" : "";
+
+  if (role !== pageRole) {
+    alert("Access denied for your role!");
+    window.location.href = "home.html";
+  }
+  const navName = document.querySelector(".nav-right .user strong");
+const navRole = document.querySelector(".nav-right .user small");
+if (navName && navRole) {
+  navName.textContent = localStorage.getItem("userName") || "Guest";
+  navRole.textContent = (localStorage.getItem("userRole") || "Visitor").toUpperCase();
+}
+});
+// admindash.js
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("pending-events-container");
+
+  try {
+    const res = await fetch("http://localhost:3000/pending-events");
+    const events = await res.json();
+
+    container.innerHTML = events.map(ev => `
+      <div class="event-item">
+        <div>
+          <h4>${ev.name}</h4>
+          <p>By ${ev.clubName} | ${ev.date} | ${ev.time} | ${ev.location}</p>
+        </div>
+        <button onclick="approveEvent(${ev.id})">Approve</button>
+      </div>
+    `).join("");
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+async function approveEvent(id) {
+  try {
+    const res = await fetch(`http://localhost:3000/approve-event/${id}`, { method: "POST" });
+    const data = await res.json();
+    if (res.ok) {
+      alert(`Event "${data.event.name}" approved!`);
+      location.reload();
+    } else alert(data.message);
+  } catch (err) {
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>
